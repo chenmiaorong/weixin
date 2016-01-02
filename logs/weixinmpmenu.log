@@ -1,0 +1,4 @@
+[ERROR] 2015-12-27 23:41:41,852       com.cmr.weixin.utils.WeixinUtil     - ´´½¨²Ëµ¥Ê§°Ü errcode:48001 errmsg:api unauthorized hint: [A2JvtA0901vr19]
+[INFO ] 2015-12-27 23:41:41,852       com.cmr.weixin.main.MenuManager     - ²Ëµ¥´´½¨Ê§°Ü£¬´íÎóÂë£º48001
+[ERROR] 2015-12-27 23:44:04,920       com.cmr.weixin.utils.WeixinUtil     - ´´½¨²Ëµ¥Ê§°Ü errcode:48001 errmsg:api unauthorized hint: [uvI1Ca0044vr18]
+[INFO ] 2015-12-27 23:44:04,920       com.cmr.weixin.main.MenuManager     - ²Ëµ¥´´½¨Ê§°Ü£¬´íÎóÂë£º48001
