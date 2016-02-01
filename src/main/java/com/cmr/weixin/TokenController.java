@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,9 @@ import com.cmr.weixin.utils.SignUtil;
 @Controller
 public class TokenController {
 
+	@Autowired
+	private CoreService coreService;
+	
 	@ResponseBody
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String getToken(@RequestParam String signature, @RequestParam String echostr, @RequestParam String timestamp,
@@ -42,7 +46,7 @@ public class TokenController {
 	@ResponseBody
 	@RequestMapping(value = "/", produces="text/plain;charset=UTF-8", method = RequestMethod.POST)
 	public String messageInput(HttpServletRequest request,HttpServletResponse response ) throws IOException {
-		String respMessage = CoreService.processRequest(request);
+		String respMessage = coreService.processRequest(request);
 		return respMessage;
 	}
 }

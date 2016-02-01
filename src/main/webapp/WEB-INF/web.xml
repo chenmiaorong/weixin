@@ -8,7 +8,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/spring/root-context.xml
-			classpath*:applicationContext.xml
+			classpath*:applicationContext*.xml
 		</param-value>
 	</context-param>
 	
@@ -21,9 +21,31 @@
 	     <param-value>classpath:log4j.properties</param-value>
 	 </context-param>
 	
+	<listener>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
 	 <listener>
 	     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	 </listener>
+	 
+	 <filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+    	<filter-name>characterEncodingFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	
+  	
 	<!-- Processes application requests -->
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
@@ -40,21 +62,6 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-<filter>
-		<filter-name>characterEncodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-    	<filter-name>characterEncodingFilter</filter-name>
-    	<url-pattern>/*</url-pattern>
-  	</filter-mapping>
+
   	
 </web-app>

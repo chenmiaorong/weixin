@@ -1,9 +1,18 @@
 package com.cmr.weixin.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.cmr.weixin.model.Paper;
 import com.cmr.weixin.model.message.resp.TextMessage;
 import com.cmr.weixin.utils.MessageUtil;
 
@@ -14,14 +23,26 @@ import com.cmr.weixin.utils.MessageUtil;
  * @author liufeng
  * @date 2013-05-20
  */
+@Service
 public class CoreService {
+	
+	@Resource(name = "paperDaoService")
+	private  PaperDaoService paperDaoService;
+	
+	
+	Logger logger = Logger.getLogger(CoreService.class);
 	/**
 	 * 处理微信发来的请求
 	 * 
 	 * @param request
 	 * @return
 	 */
-	public static String processRequest(HttpServletRequest request) {
+	
+	
+	final String tips = "目前可用题号为replace. 请按以下规则进行询问\"71A05\"，"
+			+ "71A代表试卷号，05代表题号。未上架的题目，会有老师稍后手动回复。";
+		
+	public  String processRequest(HttpServletRequest request) {
 		String respMessage = null;
 		try {
 			// 默认返回的文本消息内容
@@ -29,7 +50,8 @@ public class CoreService {
 
 			// xml请求解析
 			Map<String, String> requestMap = MessageUtil.parseXml(request);
-
+			logger.info(JSON.toJSONString(requestMap));
+			
 			// 发送方帐号（open_id）
 			String fromUserName = requestMap.get("FromUserName");
 			// 公众帐号
@@ -47,7 +69,19 @@ public class CoreService {
 
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-				respContent = "您发送的是文本消息！";
+				String  paperId  =  requestMap.get("Content");
+				if(StringUtils.isNotBlank(paperId)){
+					Paper paper = paperDaoService.getPaperById(StringUtils.upperCase(paperId));
+					if(paper != null ){
+						respContent = paper.getAnswer();
+					}else{
+						List<String> papaerIds = paperDaoService.selectAllPaperIds();
+						respContent = tips.replace("replace", JSON.toJSONString(papaerIds));
+					}
+				}
+				else{
+					respContent = "请输入内容";
+				}
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
@@ -116,6 +150,7 @@ public class CoreService {
 			e.printStackTrace();
 		}
 
+		logger.info("\n" + respMessage);
 		return respMessage;
 	}
 }
