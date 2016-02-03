@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cmr.weixin">
+
+	<resultMap id="PaperMap" type="com.cmr.weixin.model.Paper">
+		<result column="paper_id" property="paperId" jdbcType="VARCHAR" />
+		<result column="question_id" property="questionId" jdbcType="TINYINT" />
+		<result column="answer" property="answer" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<select id="selectPaperById" resultMap="PaperMap" parameterType="java.lang.String">
+		select * from paper where paper_id=#{paperid,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectAllPaperIds" resultType="java.lang.String">
+		select paper_id from paper
+	</select>
+	
+	<select id="selectPaperTips" resultType="java.lang.String">
+		select * from paper_tips limit 1
+	</select>
+
+</mapper>

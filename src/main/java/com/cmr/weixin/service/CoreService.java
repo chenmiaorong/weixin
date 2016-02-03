@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.cmr.weixin.dao.PaperTipsDao;
 import com.cmr.weixin.model.Paper;
 import com.cmr.weixin.model.message.resp.TextMessage;
 import com.cmr.weixin.utils.MessageUtil;
@@ -29,6 +31,8 @@ public class CoreService {
 	@Resource(name = "paperDaoService")
 	private  PaperDaoService paperDaoService;
 	
+	@Autowired
+	private PaperTipsDao paperTipsDao;
 	
 	Logger logger = Logger.getLogger(CoreService.class);
 	/**
@@ -38,9 +42,9 @@ public class CoreService {
 	 * @return
 	 */
 	
-	
-	final String tips = "目前可用题号为replace. 请按以下规则进行询问\"71A05\"，"
-			+ "71A代表试卷号，05代表题号。未上架的题目，会有老师稍后手动回复。";
+//	
+//	final String tips = "目前可用题号为replace. 请按以下规则进行询问\"71A05\"，"
+//			+ "71A代表试卷号，05代表题号。未上架的题目，会有老师稍后手动回复。";
 		
 	public  String processRequest(HttpServletRequest request) {
 		String respMessage = null;
@@ -75,9 +79,9 @@ public class CoreService {
 					if(paper != null ){
 						respContent = paper.getAnswer();
 					}else{
-						List<String> papaerIds = paperDaoService.selectAllPaperIds();
-						respContent = tips.replace("replace", JSON.toJSONString(papaerIds));
-					}
+						//List<String> papaerIds = paperDaoService.selectAllPaperIds();
+						respContent = paperTipsDao.getTips();
+				}
 				}
 				else{
 					respContent = "请输入内容";
